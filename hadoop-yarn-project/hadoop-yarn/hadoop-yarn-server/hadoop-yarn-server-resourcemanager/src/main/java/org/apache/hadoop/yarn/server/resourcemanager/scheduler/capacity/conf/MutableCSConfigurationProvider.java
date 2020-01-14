@@ -136,7 +136,7 @@ public class MutableCSConfigurationProvider implements CSConfigurationProvider,
   }
 
   @Override
-  public void logAndApplyMutation(UserGroupInformation user,
+  public LogMutation logAndApplyMutation(UserGroupInformation user,
       SchedConfUpdateInfo confUpdate) throws Exception {
     oldConf = new Configuration(schedConf);
     CapacitySchedulerConfiguration proposedConf =
@@ -147,6 +147,7 @@ public class MutableCSConfigurationProvider implements CSConfigurationProvider,
     confStore.logMutation(log);
     applyMutation(proposedConf, kvUpdate);
     schedConf = proposedConf;
+    return log;
   }
 
   public Configuration applyChanges(Configuration oldConfiguration,
@@ -210,10 +211,11 @@ public class MutableCSConfigurationProvider implements CSConfigurationProvider,
   }
 
   @Override
-  public void confirmPendingMutation(boolean isValid) throws Exception {
+  public void confirmPendingMutation(LogMutation pendingMutation,
+      boolean isValid) throws Exception {
     formatLock.readLock().lock();
     try {
-      confStore.confirmMutation(isValid);
+      confStore.confirmMutation(pendingMutation, isValid);
       if (!isValid) {
         schedConf = oldConf;
       }

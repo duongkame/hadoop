@@ -96,7 +96,7 @@ public class TestFSSchedulerConfigurationStore {
 
     LogMutation logMutation = new LogMutation(updates, "test");
     configurationStore.logMutation(logMutation);
-    configurationStore.confirmMutation(true);
+    configurationStore.confirmMutation(logMutation, true);
     storeConf = configurationStore.retrieve();
     assertEquals(null, storeConf.get("a"));
     assertEquals("bb", storeConf.get("b"));
@@ -106,7 +106,7 @@ public class TestFSSchedulerConfigurationStore {
 
     updates.put("b", "bbb");
     configurationStore.logMutation(logMutation);
-    configurationStore.confirmMutation(true);
+    configurationStore.confirmMutation(logMutation, true);
     storeConf = configurationStore.retrieve();
     assertEquals(null, storeConf.get("a"));
     assertEquals("bbb", storeConf.get("b"));
@@ -129,7 +129,7 @@ public class TestFSSchedulerConfigurationStore {
 
     LogMutation logMutation = new LogMutation(updates, "test");
     configurationStore.logMutation(logMutation);
-    configurationStore.confirmMutation(false);
+    configurationStore.confirmMutation(logMutation, false);
     storeConf = configurationStore.retrieve();
 
     compareConfig(conf, storeConf);
