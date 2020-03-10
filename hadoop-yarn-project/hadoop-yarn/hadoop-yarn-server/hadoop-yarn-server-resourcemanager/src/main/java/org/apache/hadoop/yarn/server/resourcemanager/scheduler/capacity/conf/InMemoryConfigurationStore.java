@@ -23,6 +23,7 @@ import org.apache.hadoop.yarn.server.records.Version;
 import org.apache.hadoop.yarn.server.resourcemanager.RMContext;
 
 import java.io.IOException;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -83,6 +84,12 @@ public class InMemoryConfigurationStore extends YarnConfigurationStore {
 
   @Override
   public List<LogMutation> getConfirmedConfHistory(long fromId) {
+    // Unimplemented.
+    return null;
+  }
+
+  @Override
+  protected LinkedList<LogMutation> getLogs() {
     // Unimplemented.
     return null;
   }
