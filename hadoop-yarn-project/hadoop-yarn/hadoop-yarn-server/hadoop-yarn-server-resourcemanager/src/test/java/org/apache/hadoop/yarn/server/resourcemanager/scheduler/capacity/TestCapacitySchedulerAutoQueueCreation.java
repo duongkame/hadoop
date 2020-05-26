@@ -766,7 +766,7 @@ public class TestCapacitySchedulerAutoQueueCreation
       submitApp(newMockRM, parentQueue, USER1, USER1, 1, 1);
       Map<String, Float> expectedAbsChildQueueCapacity =
           populateExpectedAbsCapacityByLabelForParentQueue(1);
-      validateInitialQueueEntitlement(newCS, parentQueue, USER1,
+      validateInitialQueueEntitlement(newMockRM, newCS, parentQueue, USER1,
           expectedAbsChildQueueCapacity, accessibleNodeLabelsOnC);
 
       //submit another app2 as USER2
@@ -774,7 +774,7 @@ public class TestCapacitySchedulerAutoQueueCreation
           1);
       expectedAbsChildQueueCapacity =
           populateExpectedAbsCapacityByLabelForParentQueue(2);
-      validateInitialQueueEntitlement(newCS, parentQueue, USER2,
+      validateInitialQueueEntitlement(newMockRM, newCS, parentQueue, USER2,
           expectedAbsChildQueueCapacity, accessibleNodeLabelsOnC);
 
       //validate total activated abs capacity remains the same
@@ -869,7 +869,7 @@ public class TestCapacitySchedulerAutoQueueCreation
 
       Map<String, Float> expectedChildQueueAbsCapacity =
       populateExpectedAbsCapacityByLabelForParentQueue(1);
-      validateInitialQueueEntitlement(newCS, parentQueue, USER1,
+      validateInitialQueueEntitlement(newMockRM, newCS, parentQueue, USER1,
           expectedChildQueueAbsCapacity, accessibleNodeLabelsOnC);
 
       //submit another app2 as USER2
@@ -878,7 +878,7 @@ public class TestCapacitySchedulerAutoQueueCreation
           1);
       expectedChildQueueAbsCapacity =
           populateExpectedAbsCapacityByLabelForParentQueue(2);
-      validateInitialQueueEntitlement(newCS, parentQueue, USER2,
+      validateInitialQueueEntitlement(newMockRM, newCS, parentQueue, USER2,
           expectedChildQueueAbsCapacity, accessibleNodeLabelsOnC);
 
       //update parent queue capacity
