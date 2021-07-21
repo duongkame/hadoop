@@ -208,3 +208,4 @@ HADOOP-16771. Update checkstyle to 8.26 and maven-checkstyle-plugin to 3.1.0. Co
 YARN-9744. RollingLevelDBTimelineStore.getEntityByTime fails with NPE. Contributed by Prabhu Joseph.
 YARN-9816. EntityGroupFSTimelineStore#scanActiveLogs fails when undesired files are present under /ats/active. Contribued by Prabhu Joseph.
 YARN-9903: Support reservations continue looking for Node Labels. Contributed by Jim Brennan (Jim_Brennan).
+COMPX-6739. YARN-10630. [UI2] Ambiguous queue name resolution (#3214)
