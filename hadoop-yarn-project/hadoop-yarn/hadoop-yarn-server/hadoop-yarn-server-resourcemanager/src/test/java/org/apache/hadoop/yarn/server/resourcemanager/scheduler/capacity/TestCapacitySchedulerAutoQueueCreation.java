@@ -143,7 +143,7 @@ public class TestCapacitySchedulerAutoQueueCreation
       validateInitialQueueEntitlement(parentQueue, USER0,
           expectedChildQueueAbsCapacity, accessibleNodeLabelsOnC);
 
-      validateUserAndAppLimits(autoCreatedLeafQueue, 1000, 1000);
+      validateUserAndAppLimits(autoCreatedLeafQueue, 4000, 4000);
       validateContainerLimits(autoCreatedLeafQueue, 6, 10240);
 
       assertTrue(autoCreatedLeafQueue
@@ -920,7 +920,7 @@ public class TestCapacitySchedulerAutoQueueCreation
       AutoCreatedLeafQueue user0Queue = (AutoCreatedLeafQueue) newCS.getQueue(
           USER1);
       validateCapacities(user0Queue, 0.5f, 0.15f, 1.0f, 0.5f);
-      validateUserAndAppLimits(user0Queue, 1500, 1500);
+      validateUserAndAppLimits(user0Queue, 4000, 4000);
 
       //update leaf queue template capacities
       conf.setAutoCreatedLeafQueueConfigCapacity(C, 30f);
@@ -928,7 +928,7 @@ public class TestCapacitySchedulerAutoQueueCreation
 
       newCS.reinitialize(conf, newMockRM.getRMContext());
       validateCapacities(user0Queue, 0.3f, 0.09f, 0.4f, 0.2f);
-      validateUserAndAppLimits(user0Queue, 900, 900);
+      validateUserAndAppLimits(user0Queue, 4000, 4000);
 
       //submit app1 as USER3
       submitApp(newMockRM, parentQueue, USER3, USER3, 3, 1);
@@ -936,7 +936,7 @@ public class TestCapacitySchedulerAutoQueueCreation
           (AutoCreatedLeafQueue) newCS.getQueue(USER1);
       validateCapacities(user3Queue, 0.3f, 0.09f, 0.4f,0.2f);
 
-      validateUserAndAppLimits(user3Queue, 900, 900);
+      validateUserAndAppLimits(user3Queue, 4000, 4000);
 
       //submit app1 as USER1 - is already activated. there should be no diff
       // in capacities
@@ -944,7 +944,7 @@ public class TestCapacitySchedulerAutoQueueCreation
 
       validateCapacities(user3Queue, 0.3f, 0.09f, 0.4f,0.2f);
 
-      validateUserAndAppLimits(user3Queue, 900, 900);
+      validateUserAndAppLimits(user3Queue, 4000, 4000);
       validateContainerLimits(user3Queue, 6, 10240);
 
       GuaranteedOrZeroCapacityOverTimePolicy autoCreatedQueueManagementPolicy =
