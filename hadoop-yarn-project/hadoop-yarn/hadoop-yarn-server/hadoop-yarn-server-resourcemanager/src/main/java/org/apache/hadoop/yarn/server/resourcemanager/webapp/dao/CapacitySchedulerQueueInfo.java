@@ -93,6 +93,10 @@ public class CapacitySchedulerQueueInfo {
   protected String defaultNodeLabelExpression;
   protected AutoQueueTemplatePropertiesInfo autoQueueTemplateProperties =
       new AutoQueueTemplatePropertiesInfo();
+  protected AutoQueueTemplatePropertiesInfo autoQueueParentTemplateProperties =
+      new AutoQueueTemplatePropertiesInfo();
+  protected AutoQueueTemplatePropertiesInfo autoQueueLeafTemplateProperties =
+      new AutoQueueTemplatePropertiesInfo();
 
   CapacitySchedulerQueueInfo() {
   };
@@ -173,10 +177,18 @@ public class CapacitySchedulerQueueInfo {
 
     queuePriority = q.getPriority().getPriority();
     if (q instanceof ParentQueue) {
-      orderingPolicyInfo = ((ParentQueue) q).getQueueOrderingPolicy()
+      ParentQueue queue = (ParentQueue) q;
+      orderingPolicyInfo = queue.getQueueOrderingPolicy()
           .getConfigName();
       autoQueueTemplateProperties = CapacitySchedulerInfoHelper
-            .getAutoCreatedTemplate((ParentQueue) q);
+            .getAutoCreatedTemplate(queue.getAutoCreatedQueueTemplate()
+                .getTemplateProperties());
+      autoQueueParentTemplateProperties = CapacitySchedulerInfoHelper
+          .getAutoCreatedTemplate(queue.getAutoCreatedQueueTemplate()
+              .getParentOnlyProperties());
+      autoQueueLeafTemplateProperties = CapacitySchedulerInfoHelper
+          .getAutoCreatedTemplate(queue.getAutoCreatedQueueTemplate()
+              .getLeafOnlyProperties());
     }
 
     autoCreateChildQueueEnabled = conf.
