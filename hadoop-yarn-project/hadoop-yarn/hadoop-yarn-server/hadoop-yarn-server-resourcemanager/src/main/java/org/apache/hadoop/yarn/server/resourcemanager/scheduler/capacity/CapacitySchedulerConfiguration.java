@@ -2460,6 +2460,15 @@ public class CapacitySchedulerConfiguration extends ReservationSchedulerConfigur
     setDefaultNodeLabelExpression(leafQueueConfPrefix, expression);
   }
 
+  @Private
+  @VisibleForTesting
+  public void setAutoCreatedLeafQueueConfigMaximumAllocation(String
+         queuePath, String expression) {
+    String leafQueueConfPrefix = getAutoCreatedQueueTemplateConfPrefix(
+        queuePath);
+    setQueueMaximumAllocation(leafQueueConfPrefix, expression);
+  }
+
   public static String getUnits(String resourceValue) {
     String units;
     for (int i = 0; i < resourceValue.length(); i++) {
