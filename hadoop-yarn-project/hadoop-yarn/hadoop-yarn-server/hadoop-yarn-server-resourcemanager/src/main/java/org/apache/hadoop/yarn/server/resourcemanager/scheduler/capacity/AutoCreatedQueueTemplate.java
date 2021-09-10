@@ -42,7 +42,7 @@ public class AutoCreatedQueueTemplate {
 
   private final Map<String, String> templateProperties = new HashMap<>();
 
-  public AutoCreatedQueueTemplate(Configuration configuration,
+  public AutoCreatedQueueTemplate(CapacitySchedulerConfiguration configuration,
                                   String queuePath) {
     setTemplateConfigEntries(configuration, queuePath);
   }
@@ -67,14 +67,17 @@ public class AutoCreatedQueueTemplate {
    * @param conf configuration to set
    * @param childQueuePath child queue path used for prefixing the properties
    */
-  public void setTemplateEntriesForChild(Configuration conf,
+  public void setTemplateEntriesForChild(CapacitySchedulerConfiguration conf,
                                          String childQueuePath) {
     if (childQueuePath.equals(ROOT)) {
       return;
     }
 
+    ConfigurationProperties configurationProperties =
+        conf.getConfigurationProperties();
+
     // Get all properties that are explicitly set
-    Set<String> alreadySetProps = conf.getPropsWithPrefix(
+    Set<String> alreadySetProps = configurationProperties.getPropertiesWithPrefix(
         CapacitySchedulerConfiguration.getQueuePrefix(childQueuePath)).keySet();
 
     for (Map.Entry<String, String> entry : templateProperties.entrySet()) {
@@ -94,8 +97,11 @@ public class AutoCreatedQueueTemplate {
    * yarn.scheduler.capacity.root.a.auto-queue-creation-v2.template.capacity
    * yarn.scheduler.capacity.root.*.auto-queue-creation-v2.template.capacity
    */
-  private void setTemplateConfigEntries(Configuration configuration,
+  private void setTemplateConfigEntries(CapacitySchedulerConfiguration configuration,
                                         String queuePath) {
+    ConfigurationProperties configurationProperties =
+        configuration.getConfigurationProperties();
+
     List<String> queuePathParts = new ArrayList<>(Arrays.asList(
         queuePath.split("\\.")));
 
@@ -122,7 +128,7 @@ public class AutoCreatedQueueTemplate {
       String templateQueuePath = String.join(".", queuePathParts);
       // Get all configuration entries with
       // <queuePath>.auto-queue-creation-v2.template prefix
-      Map<String, String> props = configuration.getPropsWithPrefix(
+      Map<String, String> props = configurationProperties.getPropertiesWithPrefix(
           getAutoQueueTemplatePrefix(templateQueuePath));
 
       for (Map.Entry<String, String> entry : props.entrySet()) {
