@@ -19,6 +19,7 @@ package org.apache.hadoop.yarn.server.resourcemanager.webapp.dao;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Map;
 import java.util.Set;
 import java.util.regex.Pattern;
@@ -159,21 +160,7 @@ public class CapacitySchedulerQueueInfo {
 
     CapacitySchedulerConfiguration conf = cs.getConfiguration();
     queueAcls = new QueueAclsInfo();
-    for (Map.Entry<AccessType, AccessControlList> e : conf
-        .getAcls(queuePath).entrySet()) {
-      QueueAclInfo queueAcl = new QueueAclInfo(e.getKey().toString(),
-          e.getValue().getAclString());
-      queueAcls.add(queueAcl);
-    }
-
-    String aclApplicationMaxPriority = "acl_" +
-        StringUtils.toLowerCase(AccessType.APPLICATION_MAX_PRIORITY.toString());
-    String priorityAcls = conf.get(CapacitySchedulerConfiguration
-        .getQueuePrefix(queuePath) + aclApplicationMaxPriority, conf.ALL_ACL);
-
-    QueueAclInfo queueAcl = new QueueAclInfo(
-        AccessType.APPLICATION_MAX_PRIORITY.toString(), priorityAcls);
-    queueAcls.add(queueAcl);
+    queueAcls.addAll(getSortedQueueAclInfoList(queuePath, conf));
 
     queuePriority = q.getPriority().getPriority();
     if (q instanceof ParentQueue) {
@@ -200,6 +187,29 @@ public class CapacitySchedulerQueueInfo {
         CapacitySchedulerConfiguration.getQueuePrefix(queuePath) + CAPACITY);
     isAbsoluteResource = (configuredCapacity != null)
         && resourcePattern.matcher(configuredCapacity).find();
+  }
+
+  public static ArrayList<QueueAclInfo> getSortedQueueAclInfoList(String queuePath,
+                                                             CapacitySchedulerConfiguration conf) {
+    ArrayList<QueueAclInfo> queueAclsInfo = new ArrayList<>();
+    for (Map.Entry<AccessType, AccessControlList> e : conf
+        .getAcls(queuePath).entrySet()) {
+      QueueAclInfo queueAcl = new QueueAclInfo(e.getKey().toString(),
+          e.getValue().getAclString());
+      queueAclsInfo.add(queueAcl);
+    }
+
+    String aclApplicationMaxPriority = "acl_" +
+        StringUtils.toLowerCase(AccessType.APPLICATION_MAX_PRIORITY.toString());
+    String priorityAcls = conf.get(CapacitySchedulerConfiguration
+        .getQueuePrefix(queuePath) + aclApplicationMaxPriority,
+        CapacitySchedulerConfiguration.ALL_ACL);
+
+    QueueAclInfo queueAcl = new QueueAclInfo(
+        AccessType.APPLICATION_MAX_PRIORITY.toString(), priorityAcls);
+    queueAclsInfo.add(queueAcl);
+    queueAclsInfo.sort(Comparator.comparing(QueueAclInfo::getAccessType));
+    return queueAclsInfo;
   }
 
   protected void populateQueueResourceUsage(ResourceUsage queueResourceUsage) {
