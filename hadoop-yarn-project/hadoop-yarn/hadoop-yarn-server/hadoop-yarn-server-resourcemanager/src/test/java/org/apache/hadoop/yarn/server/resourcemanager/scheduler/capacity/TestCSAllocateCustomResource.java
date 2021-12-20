@@ -19,19 +19,14 @@
 package org.apache.hadoop.yarn.server.resourcemanager.scheduler.capacity;
 
 import org.apache.commons.io.FileUtils;
-import org.apache.hadoop.yarn.LocalConfigurationProvider;
 import org.apache.hadoop.yarn.api.records.ContainerId;
 import org.apache.hadoop.yarn.api.records.Resource;
 import org.apache.hadoop.yarn.conf.YarnConfiguration;
 import org.apache.hadoop.yarn.server.resourcemanager.MockAM;
 import org.apache.hadoop.yarn.server.resourcemanager.MockNM;
 import org.apache.hadoop.yarn.server.resourcemanager.MockRM;
-import org.apache.hadoop.yarn.server.resourcemanager.MockRMAppSubmissionData;
-import org.apache.hadoop.yarn.server.resourcemanager.MockRMAppSubmitter;
-import org.apache.hadoop.yarn.server.resourcemanager.RMContext;
 import org.apache.hadoop.yarn.server.resourcemanager.nodelabels.NullRMNodeLabelsManager;
 import org.apache.hadoop.yarn.server.resourcemanager.nodelabels.RMNodeLabelsManager;
-import org.apache.hadoop.yarn.server.resourcemanager.placement.PlacementManager;
 import org.apache.hadoop.yarn.server.resourcemanager.resource.TestResourceProfiles;
 import org.apache.hadoop.yarn.server.resourcemanager.rmapp.RMApp;
 import org.apache.hadoop.yarn.server.resourcemanager.rmnode.RMNode;
@@ -49,12 +44,18 @@ import org.junit.Test;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+import static org.apache.hadoop.yarn.api.records.ResourceInformation.FPGA_URI;
+import static org.apache.hadoop.yarn.api.records.ResourceInformation.GPU_URI;
 import static org.apache.hadoop.yarn.server.resourcemanager.scheduler.capacity.CapacitySchedulerConfiguration.MAXIMUM_ALLOCATION_MB;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.spy;
-import static org.mockito.Mockito.when;
+
+import com.google.common.collect.Maps;
 
 /**
  * Test case for custom resource container allocation.
@@ -181,5 +182,79 @@ public class TestCSAllocateCustomResource {
         cs.getMaximumResourceCapability("a")
             .getResourceValue("yarn.io/gpu"));
     rm.close();
+  }
+
+  /**
+   * Test CS absolute conf with Custom resource type.
+   * */
+  @Test
+  public void testCapacitySchedulerAbsoluteConfWithCustomResourceType()
+      throws IOException {
+    // reset resource types
+    ResourceUtils.resetResourceTypes();
+    String resourceTypesFileName = "resource-types-test.xml";
+    File source = new File(
+        conf.getClassLoader().getResource(resourceTypesFileName).getFile());
+    resourceTypesFile = new File(source.getParent(), "resource-types.xml");
+    FileUtils.copyFile(source, resourceTypesFile);
+
+    CapacitySchedulerConfiguration newConf =
+        new CapacitySchedulerConfiguration(conf);
+
+    // Only memory vcores for first class.
+    Set<String> resourceTypes = Arrays.
+        stream(CapacitySchedulerConfiguration.
+        AbsoluteResourceType.values()).
+        map(value -> value.toString().toLowerCase()).
+        collect(Collectors.toSet());
+
+    Map<String, Long> valuesMin = Maps.newHashMap();
+    valuesMin.put(GPU_URI, 10L);
+    valuesMin.put(FPGA_URI, 10L);
+    valuesMin.put("testType", 10L);
+
+    Map<String, Long> valuesMax = Maps.newHashMap();
+    valuesMax.put(GPU_URI, 100L);
+    valuesMax.put(FPGA_URI, 100L);
+    valuesMax.put("testType", 100L);
+
+    Resource aMINRES =
+        Resource.newInstance(1000, 10, valuesMin);
+
+    Resource aMAXRES =
+        Resource.newInstance(1000, 10, valuesMax);
+
+    // Define top-level queues
+    newConf.setQueues(CapacitySchedulerConfiguration.ROOT,
+        new String[] {"a", "b", "c"});
+    newConf.setMinimumResourceRequirement("", "root.a",
+        aMINRES);
+    newConf.setMaximumResourceRequirement("", "root.a",
+        aMAXRES);
+
+    newConf.setClass(CapacitySchedulerConfiguration.RESOURCE_CALCULATOR_CLASS,
+        DominantResourceCalculator.class, ResourceCalculator.class);
+
+    //start RM
+    MockRM rm = new MockRM(newConf);
+    rm.start();
+
+    // Check the gpu resource conf is right.
+    CapacityScheduler cs = (CapacityScheduler) rm.getResourceScheduler();
+    Assert.assertEquals(aMINRES,
+        cs.getConfiguration().
+            getMinimumResourceRequirement("", "root.a", resourceTypes));
+    Assert.assertEquals(aMAXRES,
+        cs.getConfiguration().
+            getMaximumResourceRequirement("", "root.a", resourceTypes));
+
+    // Check the gpu resource of queue is right.
+    Assert.assertEquals(aMINRES, cs.getQueue("a").
+        getQueueResourceQuotas().getConfiguredMinResource());
+    Assert.assertEquals(aMAXRES, cs.getQueue("a").
+        getQueueResourceQuotas().getConfiguredMaxResource());
+
+    rm.close();
+
   }
 }
