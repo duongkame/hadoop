@@ -16,15 +16,14 @@ package org.apache.hadoop.security.authentication.util;
 import org.apache.hadoop.security.authentication.server.AuthenticationFilter;
 import org.junit.Assert;
 import org.junit.Test;
-import org.junit.function.ThrowingRunnable;
 
 import java.io.File;
 import java.io.FileWriter;
 import java.io.Writer;
 import java.util.Properties;
 
-import static org.junit.Assert.assertThrows;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 public class TestFileSignerSecretProvider {
 
@@ -65,14 +64,12 @@ public class TestFileSignerSecretProvider {
             AuthenticationFilter.SIGNATURE_SECRET_FILE,
             secretFile.getAbsolutePath());
 
-    Exception exception =
-        assertThrows(RuntimeException.class, new ThrowingRunnable() {
-          @Override
-          public void run() throws Throwable {
-            secretProvider.init(secretProviderProps, null, -1);
-          }
-        });
-    assertTrue(exception.getMessage().startsWith(
-        "No secret in signature secret file:"));
+    try {
+      secretProvider.init(secretProviderProps, null, -1);
+      fail("No RuntimeException was thrown");
+    } catch (RuntimeException e) {
+      assertTrue(e.getMessage().startsWith("No secret in signature secret file:"));
+    }
+
   }
 }
