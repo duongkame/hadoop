@@ -19,7 +19,7 @@ SONAR_PROJECT_KEY="${SONAR_PROJECT_KEY:-}"
 SONAR_PROJECT_NAME="${SONAR_PROJECT_NAME:-}"
 
 mvn -s "$MAVEN_SETTINGS" -B -e -Pclover -f "${SCRIPT_DIR}/../pom.xml" clean install -DskipTests -DskipShade \
-    --projects '!hadoop-client-modules/hadoop-client-check-invariants,!hadoop-client-modules/hadoop-client-check-test-invariants'
+    --projects '!hadoop-client-modules/hadoop-client-check-invariants,!hadoop-client-modules/hadoop-client-check-test-invariants,!hadoop-yarn-project/hadoop-yarn/hadoop-yarn-server/hadoop-yarn-server-timelineservice-hbase-tests'
 
 mvn -s "$MAVEN_SETTINGS" -B -e -Pclover -f "$POM_FILE" test -Dparallel-tests -DtestsThreadCount=8 -Dscale -Dtest.exclude.pattern="$TEST_EXCLUDE_PATTERN" -DignoreTestFailure=true -DbatsFailOnError=false "$@"
 
