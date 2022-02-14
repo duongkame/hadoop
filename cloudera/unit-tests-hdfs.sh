@@ -4,4 +4,4 @@
 POM_FILE=hadoop-hdfs-project/pom.xml \
 SONAR_PROJECT_KEY=hadoop_hdfs_ut_master \
 SONAR_PROJECT_NAME="Hadoop HDFS UT-master" \
-cloudera/unit-tests.sh $@
+cloudera/unit-tests.sh "$@"
