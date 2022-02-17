@@ -105,6 +105,8 @@ import org.apache.hadoop.yarn.server.resourcemanager.MockAM;
 import org.apache.hadoop.yarn.server.resourcemanager.MockNM;
 import org.apache.hadoop.yarn.server.resourcemanager.MockNodes;
 import org.apache.hadoop.yarn.server.resourcemanager.MockRM;
+import org.apache.hadoop.yarn.server.resourcemanager.MockRMAppSubmissionData;
+import org.apache.hadoop.yarn.server.resourcemanager.MockRMAppSubmitter;
 import org.apache.hadoop.yarn.server.resourcemanager.NodeManager;
 import org.apache.hadoop.yarn.server.resourcemanager.RMContext;
 import org.apache.hadoop.yarn.server.resourcemanager.RMContextImpl;
@@ -193,6 +195,7 @@ public class TestCapacityScheduler extends CapacitySchedulerTestBase {
   private RMContext mockContext;
 
   private static final double DELTA = 0.000001;
+  public static final int MAX_PARALLEL_APPS = 5;
 
   @Before
   public void setUp() throws Exception {
@@ -2532,6 +2535,51 @@ public class TestCapacityScheduler extends CapacitySchedulerTestBase {
 
     appsInA = scheduler.getAppsInQueue("a");
     assertTrue(appsInA.isEmpty());
+
+    rm.stop();
+  }
+
+  @Test
+  public void testMaxParallelAppsPendingQueueMetrics() throws Exception {
+    MockRM rm = setUpMove();
+    ResourceScheduler scheduler = rm.getResourceScheduler();
+    CapacityScheduler cs = (CapacityScheduler) scheduler;
+    cs.getConfiguration().setInt(CapacitySchedulerConfiguration.getQueuePrefix(A1)
+        + CapacitySchedulerConfiguration.MAX_PARALLEL_APPLICATIONS, MAX_PARALLEL_APPS);
+    cs.reinitialize(cs.getConfiguration(), mockContext);
+    List<ApplicationAttemptId> attemptIds = new ArrayList<>();
+
+    for (int i = 0; i < 2 * MAX_PARALLEL_APPS; i++) {
+      // submit an app
+      MockRMAppSubmissionData data =
+          MockRMAppSubmissionData.Builder.createWithMemory(GB, rm)
+              .withAppName("test-move-1")
+              .withUser("user_0")
+              .withAcls(null)
+              .withQueue("a1")
+              .withUnmanagedAM(false)
+              .build();
+      RMApp app = MockRMAppSubmitter.submit(rm, data);
+      attemptIds.add(rm.getApplicationReport(app.getApplicationId())
+          .getCurrentApplicationAttemptId());
+    }
+
+    // Finish first batch to allow the other batch to run
+    for (int i = 0; i < MAX_PARALLEL_APPS; i++) {
+      cs.handle(new AppAttemptRemovedSchedulerEvent(attemptIds.get(i),
+          RMAppAttemptState.FINISHED, true));
+    }
+
+    // Finish the remaining apps
+    for (int i = MAX_PARALLEL_APPS; i < 2 * MAX_PARALLEL_APPS; i++) {
+      cs.handle(new AppAttemptRemovedSchedulerEvent(attemptIds.get(i),
+          RMAppAttemptState.FINISHED, true));
+    }
+
+    Assert.assertEquals("No pending app should remain for root queue", 0,
+        cs.getRootQueueMetrics().getAppsPending());
+    Assert.assertEquals("No running application should remain for root queue", 0,
+        cs.getRootQueueMetrics().getAppsRunning());
 
     rm.stop();
   }
