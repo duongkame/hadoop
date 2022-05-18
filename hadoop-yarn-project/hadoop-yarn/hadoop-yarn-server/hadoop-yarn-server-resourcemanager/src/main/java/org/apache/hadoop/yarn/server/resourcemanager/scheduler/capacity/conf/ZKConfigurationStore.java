@@ -21,6 +21,7 @@ package org.apache.hadoop.yarn.server.resourcemanager.scheduler.capacity.conf;
 import com.google.common.annotations.VisibleForTesting;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.commons.io.serialization.ValidatingObjectInputStream;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.util.curator.ZKCuratorManager;
 import org.apache.hadoop.yarn.conf.YarnConfiguration;
@@ -34,7 +35,6 @@ import org.apache.zookeeper.data.ACL;
 import java.io.IOException;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -253,7 +253,8 @@ public class ZKConfigurationStore extends YarnConfigurationStore {
 
   private static Object deserializeObject(byte[] bytes) throws Exception {
     try (ByteArrayInputStream bais = new ByteArrayInputStream(bytes);
-        ObjectInputStream ois = new ObjectInputStream(bais);) {
+         ValidatingObjectInputStream ois = new ValidatingObjectInputStream(bais);) {
+      ois.accept(LinkedList.class, LogMutation.class, HashMap.class, String.class);
       return ois.readObject();
     }
   }
