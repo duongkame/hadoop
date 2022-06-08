@@ -1594,9 +1594,8 @@ public class CapacitySchedulerConfiguration extends ReservationSchedulerConfigur
    */
   public Map<String, Set<String>> getConfiguredNodeLabelsByQueue() {
     Map<String, Set<String>> labelsByQueue = new HashMap<>();
-    Map<String, String> schedulerEntries =
-        getConfigurationProperties().getPropertiesWithPrefix(
-            CapacitySchedulerConfiguration.PREFIX);
+    Map<String, String> schedulerEntries = getPropsWithPrefix(
+        CapacitySchedulerConfiguration.PREFIX);
 
     for (Map.Entry<String, String> propertyEntry
         : schedulerEntries.entrySet()) {
