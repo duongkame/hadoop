@@ -31,7 +31,8 @@
 
     <failIfNoTests>false</failIfNoTests>
     <!--Whether to proceed to next module if any test failures exist-->
-    <ignoreTestFailure>true</ignoreTestFailure>
+    <ignoreTestFailure>false</ignoreTestFailure>
+    <batsFailOnError>true</batsFailOnError>
     <maven.test.redirectTestOutputToFile>true</maven.test.redirectTestOutputToFile>
     <jetty.version>9.4.40.v20210413</jetty.version>
     <test.exclude>_</test.exclude>
