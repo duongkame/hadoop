@@ -1809,6 +1809,16 @@ public class CapacitySchedulerConfiguration extends ReservationSchedulerConfigur
   public static final String DEFAULT_INTRAQUEUE_PREEMPTION_ORDER_POLICY = "userlimit_first";
 
   /**
+   * For intra-queue preemption, enable minimum demand to trigger preemption when
+   * fair ordering policy is used
+   */
+  public static final String INTRAQUEUE_PREEMPTION_MIN_FAIR_DEMAND_ENABLED =
+      PREEMPTION_CONFIG_PREFIX +
+          INTRA_QUEUE_PREEMPTION_CONFIG_PREFIX + "min-fair-demand-enabled";
+  public static final boolean DEFAULT_INTRAQUEUE_PREEMPTION_MIN_FAIR_DEMAND_ENABLED =
+      false;
+
+  /**
    * Should we allow queues continue grow after all queue reaches their
    * guaranteed capacity.
    */
