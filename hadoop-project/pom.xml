@@ -16,10 +16,10 @@
   <parent>
     <groupId>org.apache.hadoop</groupId>
     <artifactId>hadoop-main</artifactId>
-    <version>3.1.1.7.1.7.0-SNAPSHOT</version>
+    <version>3.1.1.7.1.7.2000-SNAPSHOT</version>
   </parent>
   <artifactId>hadoop-project</artifactId>
-  <version>3.1.1.7.1.7.0-SNAPSHOT</version>
+  <version>3.1.1.7.1.7.2000-SNAPSHOT</version>
   <description>Apache Hadoop Project POM</description>
   <name>Apache Hadoop Project POM</name>
   <packaging>pom</packaging>
@@ -49,7 +49,7 @@
 
     <kafka.version>0.8.2.1</kafka.version>
 
-    <hadoop.assemblies.version>3.1.1.7.1.7.0-SNAPSHOT</hadoop.assemblies.version>
+    <hadoop.assemblies.version>3.1.1.7.1.7.2000-SNAPSHOT</hadoop.assemblies.version>
     <commons-daemon.version>1.0.13</commons-daemon.version>
 
     <test.build.dir>${project.build.directory}/test-dir</test.build.dir>
@@ -61,7 +61,7 @@
     <java.security.egd>file:///dev/urandom</java.security.egd>
 
     <!-- avro version -->
-    <avro.version>1.8.2.7.1.7.0-SNAPSHOT</avro.version>
+    <avro.version>1.8.2.7.1.7.2000-SNAPSHOT</avro.version>
 
     <!-- jersey version -->
     <jersey.version>1.19</jersey.version>
@@ -78,7 +78,7 @@
 
     <!-- SLF4J/LOG4J version -->
     <slf4j.version>1.7.30</slf4j.version>
-    <log4j.version>1.2.17-cloudera1</log4j.version>
+    <log4j.version>1.2.17-cloudera6</log4j.version>
 
     <!-- com.google.re2j version -->
     <re2j.version>1.2</re2j.version>
@@ -88,8 +88,8 @@
     <protobuf.version>2.5.0</protobuf.version>
     <protoc.path>${env.HADOOP_PROTOC_PATH}</protoc.path>
 
-    <zookeeper.version>3.5.5.7.1.7.0-SNAPSHOT</zookeeper.version>
-    <curator.version>4.3.0.7.1.7.0-SNAPSHOT</curator.version>
+    <zookeeper.version>3.5.5.7.1.7.2000-SNAPSHOT</zookeeper.version>
+    <curator.version>4.3.0.7.1.7.2000-SNAPSHOT</curator.version>
     <findbugs.version>3.0.0</findbugs.version>
     <spotbugs.version>3.1.0-RC1</spotbugs.version>
     <dnsjava.version>2.1.7</dnsjava.version>
@@ -108,7 +108,7 @@
     <commons-cli.version>1.2</commons-cli.version>
     <commons-codec.version>1.14</commons-codec.version>
     <commons-collections.version>3.2.2</commons-collections.version>
-    <commons-compress.version>1.19</commons-compress.version>
+    <commons-compress.version>1.21</commons-compress.version>
     <commons-csv.version>1.0</commons-csv.version>
     <commons-io.version>2.11.0</commons-io.version>
     <commons-lang3.version>3.8.1</commons-lang3.version>
@@ -130,7 +130,7 @@
     <gson.version>2.2.4</gson.version>
     <metrics.version>3.2.4</metrics.version>
     <netty3.version>3.10.6.Final</netty3.version>
-    <netty4.version>4.1.60.Final</netty4.version>
+    <netty4.version>4.1.68.Final</netty4.version>
 
     <!-- define the Java language version used by the compiler -->
     <javac.version>1.8</javac.version>
@@ -174,10 +174,10 @@
     <swagger-annotations-version>1.5.4</swagger-annotations-version>
     <snakeyaml.version>1.26</snakeyaml.version>
     <hbase.one.version>1.2.6</hbase.one.version>
-    <hbase.two.version>2.2.3.7.1.7.0-SNAPSHOT</hbase.two.version>
-    <gcs.version>2.1.2.7.1.7.0-SNAPSHOT</gcs.version>
-    <knox.version>1.3.0.7.1.7.0-SNAPSHOT</knox.version>
-    <ranger.version>2.1.0.7.1.7.0-SNAPSHOT</ranger.version>
+    <hbase.two.version>2.2.3.7.1.7.2000-SNAPSHOT</hbase.two.version>
+    <gcs.version>2.1.2.7.1.7.2000-SNAPSHOT</gcs.version>
+    <knox.version>1.3.0.7.1.7.2000-SNAPSHOT</knox.version>
+    <ranger.version>2.1.0.7.1.7.2000-SNAPSHOT</ranger.version>
     <assertj.version>3.12.2</assertj.version>
     <junit.version>4.12</junit.version>
     <junit.jupiter.version>5.3.1</junit.jupiter.version>
