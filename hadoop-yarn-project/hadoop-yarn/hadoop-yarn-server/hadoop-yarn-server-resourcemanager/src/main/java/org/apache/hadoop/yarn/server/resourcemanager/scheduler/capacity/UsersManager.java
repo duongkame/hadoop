@@ -970,7 +970,7 @@ public class UsersManager implements AbstractUsersManager {
 
         // Update total resource usage of active and non-active after user
         // is moved from non-active to active.
-        for (String partition : resourceUsage.getNodePartitionsSet()) {
+        for (String partition : resourceUsage.getExistingNodeLabels()) {
           totalResUsageForNonActiveUsers.decUsed(partition,
               resourceUsage.getUsed(partition));
           totalResUsageForActiveUsers.incUsed(partition,
@@ -1011,7 +1011,7 @@ public class UsersManager implements AbstractUsersManager {
 
         // Update total resource usage of active and non-active after user is
         // moved from active to non-active.
-        for (String partition : resourceUsage.getNodePartitionsSet()) {
+        for (String partition : resourceUsage.getExistingNodeLabels()) {
           totalResUsageForActiveUsers.decUsed(partition,
               resourceUsage.getUsed(partition));
           totalResUsageForNonActiveUsers.incUsed(partition,

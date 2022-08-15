@@ -1707,8 +1707,8 @@ public class LeafQueue extends AbstractCSQueue {
 
       if (nodePartition == null) {
         for (String partition : Sets.union(
-            getQueueCapacities().getNodePartitionsSet(),
-            queueResourceUsage.getNodePartitionsSet())) {
+            getQueueCapacities().getExistingNodeLabels(),
+            queueResourceUsage.getExistingNodeLabels())) {
           usersManager.updateUsageRatio(partition, clusterResource);
         }
       } else {
