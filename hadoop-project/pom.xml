@@ -187,6 +187,7 @@
     <t9000-core.version>1.0.0.7.2.7.0-SNAPSHOT</t9000-core.version>
     <jsonschema2pojo.version>1.0.2</jsonschema2pojo.version>
     <json-smart.version>2.4.8</json-smart.version>
+    <nimbus-jose-jwt.version>9.23</nimbus-jose-jwt.version>
   </properties>
 
   <dependencyManagement>
@@ -1444,7 +1445,7 @@
       <dependency>
           <groupId>com.nimbusds</groupId>
           <artifactId>nimbus-jose-jwt</artifactId>
-          <version>7.9</version>
+          <version>${nimbus-jose-jwt.version}</version>
           <scope>compile</scope>
           <exclusions>
           <exclusion>
