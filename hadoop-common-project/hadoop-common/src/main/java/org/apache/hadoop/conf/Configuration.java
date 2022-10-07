@@ -99,6 +99,8 @@ import org.apache.hadoop.security.alias.CredentialProviderFactory;
 import org.apache.hadoop.util.ReflectionUtils;
 import org.apache.hadoop.util.StringInterner;
 import org.apache.hadoop.util.StringUtils;
+import org.apache.hadoop.util.XMLUtils;
+
 import org.codehaus.stax2.XMLStreamReader2;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -3561,7 +3563,7 @@ public class Configuration implements Iterable<Map.Entry<String,String>>,
     try {
       DOMSource source = new DOMSource(doc);
       StreamResult result = new StreamResult(out);
-      TransformerFactory transFactory = TransformerFactory.newInstance();
+      TransformerFactory transFactory = XMLUtils.newSecureTransformerFactory();
       Transformer transformer = transFactory.newTransformer();
 
       // Important to not hold Configuration log while writing result, since
