@@ -7,6 +7,7 @@
   "normalizedWeight": 0,
   "queueName": "root",
   "queuePath": "root",
+  "isAbsoluteResource": false,
   "queues": {"queue": [
     {
       "queuePath": "root.a",

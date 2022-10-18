@@ -22,7 +22,6 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Map;
 import java.util.Set;
-import java.util.regex.Pattern;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -36,6 +35,7 @@ import org.apache.hadoop.yarn.api.records.QueueState;
 import org.apache.hadoop.yarn.security.AccessType;
 import org.apache.hadoop.yarn.server.resourcemanager.scheduler.QueueResourceQuotas;
 import org.apache.hadoop.yarn.server.resourcemanager.scheduler.ResourceUsage;
+import org.apache.hadoop.yarn.server.resourcemanager.scheduler.capacity.AbstractCSQueue;
 import org.apache.hadoop.yarn.server.resourcemanager.scheduler.capacity.CapacityScheduler;
 import org.apache.hadoop.yarn.server.resourcemanager.scheduler.capacity.CapacitySchedulerConfiguration;
 import org.apache.hadoop.yarn.server.resourcemanager.scheduler.capacity.CSQueue;
@@ -43,11 +43,6 @@ import org.apache.hadoop.yarn.server.resourcemanager.scheduler.capacity.ParentQu
 import org.apache.hadoop.yarn.server.resourcemanager.scheduler.capacity.PlanQueue;
 import org.apache.hadoop.yarn.server.resourcemanager.scheduler.capacity.QueueCapacities;
 import org.apache.hadoop.yarn.server.resourcemanager.webapp.dao.helper.CapacitySchedulerInfoHelper;
-
-import static org.apache.hadoop.yarn.server.resourcemanager.scheduler.capacity.
-    CapacitySchedulerConfiguration.PATTERN_FOR_ABSOLUTE_RESOURCE;
-import static org.apache.hadoop.yarn.server.resourcemanager.scheduler.capacity.
-    CapacitySchedulerConfiguration.CAPACITY;
 
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
@@ -182,11 +177,8 @@ public class CapacitySchedulerQueueInfo {
         isAutoCreateChildQueueEnabled(queuePath);
     leafQueueTemplate = new LeafQueueTemplateInfo(conf, queuePath);
 
-    Pattern resourcePattern = Pattern.compile(PATTERN_FOR_ABSOLUTE_RESOURCE);
-    String configuredCapacity = conf.get(
-        CapacitySchedulerConfiguration.getQueuePrefix(queuePath) + CAPACITY);
-    isAbsoluteResource = (configuredCapacity != null)
-        && resourcePattern.matcher(configuredCapacity).find();
+    isAbsoluteResource = q.getCapacityConfigType() ==
+        AbstractCSQueue.CapacityConfigType.ABSOLUTE_RESOURCE;
   }
 
   public static ArrayList<QueueAclInfo> getSortedQueueAclInfoList(String queuePath,

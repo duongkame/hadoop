@@ -7,6 +7,7 @@
     <normalizedWeight>0.0</normalizedWeight>
     <queueName>root</queueName>
     <queuePath>root</queuePath>
+    <isAbsoluteResource>false</isAbsoluteResource>
     <queues>
       <queue>
         <queuePath>root.a</queuePath>
