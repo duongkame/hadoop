@@ -18,7 +18,8 @@
 
 package org.apache.hadoop.yarn.server.resourcemanager.webapp;
 
-import static org.junit.Assert.assertEquals;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.inject.Guice;
 import com.google.inject.servlet.ServletModule;
 import com.sun.jersey.api.client.ClientResponse;
@@ -71,6 +72,7 @@ import static org.apache.hadoop.yarn.server.resourcemanager.scheduler.capacity.C
 import static org.apache.hadoop.yarn.server.resourcemanager.scheduler.capacity.CapacitySchedulerConfiguration.CAPACITY;
 import static org.apache.hadoop.yarn.server.resourcemanager.scheduler.capacity.CapacitySchedulerConfiguration.DOT;
 import static org.apache.hadoop.yarn.server.resourcemanager.scheduler.capacity.CapacitySchedulerConfiguration.PREFIX;
+import static org.junit.Assert.assertEquals;
 
 public class TestRMWebServicesCapacitySched extends JerseyTestBase {
 
@@ -298,7 +300,16 @@ public class TestRMWebServicesCapacitySched extends JerseyTestBase {
     JSONObject json = response.getEntity(JSONObject.class);
     String actual = json.toString(2);
     updateTestDataAutomatically(expectedResourceFilename, actual);
-    assertEquals(getResourceAsString(expectedResourceFilename), actual);
+    assertEquals(
+        prettyPrintJson(getResourceAsString(expectedResourceFilename)),
+        prettyPrintJson(actual));
+  }
+
+  private static String prettyPrintJson(String in) throws JsonProcessingException {
+    ObjectMapper objectMapper = new ObjectMapper();
+    return objectMapper
+        .writerWithDefaultPrettyPrinter()
+        .writeValueAsString(objectMapper.readTree(in));
   }
 
   public static void assertJsonType(ClientResponse response) {
