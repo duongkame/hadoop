@@ -34,7 +34,7 @@
     <ignoreTestFailure>false</ignoreTestFailure>
     <batsFailOnError>true</batsFailOnError>
     <maven.test.redirectTestOutputToFile>true</maven.test.redirectTestOutputToFile>
-    <jetty.version>9.4.40.v20210413</jetty.version>
+    <jetty.version>9.4.48.v20220622</jetty.version>
     <test.exclude>_</test.exclude>
     <test.exclude.pattern>_</test.exclude.pattern>
 
