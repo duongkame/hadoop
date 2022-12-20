@@ -93,8 +93,9 @@ public final class FileSystemConfigurations {
   public static final boolean DEFAULT_DISABLE_OUTPUTSTREAM_FLUSH = true;
   public static final boolean DEFAULT_ENABLE_AUTOTHROTTLING = true;
 
+  // Setting the default ssl channel mode to JSSE. refer CDPD-45959.
   public static final DelegatingSSLSocketFactory.SSLChannelMode DEFAULT_FS_AZURE_SSL_CHANNEL_MODE
-      = DelegatingSSLSocketFactory.SSLChannelMode.Default;
+      = DelegatingSSLSocketFactory.SSLChannelMode.Default_JSSE;
 
   public static final boolean DEFAULT_ENABLE_DELEGATION_TOKEN = false;
   public static final boolean DEFAULT_ENABLE_HTTPS = true;
