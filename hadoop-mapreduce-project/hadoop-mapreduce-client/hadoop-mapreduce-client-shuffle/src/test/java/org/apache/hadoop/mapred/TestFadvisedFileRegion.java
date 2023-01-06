@@ -104,7 +104,7 @@ public class TestFadvisedFileRegion {
       Assert.assertEquals(count, targetFile.length());
     } finally {
       if (fileRegion != null) {
-        fileRegion.deallocate();
+        fileRegion.releaseExternalResources();
       }
       IOUtils.cleanupWithLogger(LOG, target);
       IOUtils.cleanupWithLogger(LOG, targetFile);
