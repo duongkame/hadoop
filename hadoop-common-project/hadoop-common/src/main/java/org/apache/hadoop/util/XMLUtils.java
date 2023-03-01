@@ -46,18 +46,19 @@ public class XMLUtils {
 
   private static final Logger LOG =
           LoggerFactory.getLogger(XMLUtils.class);
-          
+
   private static final String DISALLOW_DOCTYPE_DECL =
       "http://apache.org/xml/features/disallow-doctype-decl";
-  private static final String LOAD_EXTERNAL_DECL =
+  public static final String LOAD_EXTERNAL_DECL =
       "http://apache.org/xml/features/nonvalidating/load-external-dtd";
-  private static final String EXTERNAL_GENERAL_ENTITIES =
+  public static final String EXTERNAL_GENERAL_ENTITIES =
       "http://xml.org/sax/features/external-general-entities";
-  private static final String EXTERNAL_PARAMETER_ENTITIES =
+  public static final String EXTERNAL_PARAMETER_ENTITIES =
       "http://xml.org/sax/features/external-parameter-entities";
-  private static final String CREATE_ENTITY_REF_NODES =
+  public static final String CREATE_ENTITY_REF_NODES =
       "http://apache.org/xml/features/dom/create-entity-ref-nodes";
-
+  public static final String VALIDATION =
+      "http://xml.org/sax/features/validation";
 
   private static final AtomicBoolean CAN_SET_TRANSFORMER_ACCESS_EXTERNAL_DTD =
           new AtomicBoolean(true);
@@ -74,8 +75,8 @@ public class XMLUtils {
    * @throws TransformerException
    */
   public static void transform(
-                               InputStream styleSheet, InputStream xml, Writer out
-                               ) 
+      InputStream styleSheet, InputStream xml, Writer out
+  )
     throws TransformerConfigurationException, TransformerException {
     // Instantiate a TransformerFactory
     TransformerFactory tFactory = newSecureTransformerFactory();
