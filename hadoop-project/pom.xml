@@ -117,7 +117,7 @@
     <commons-math3.version>3.1.1</commons-math3.version>
     <commons-net.version>3.6</commons-net.version>
 
-    <kerby.version>2.0.2</kerby.version>
+    <kerby.version>2.0.3</kerby.version>
     <jcache.version>1.0-alpha-1</jcache.version>
     <ehcache.version>3.3.1</ehcache.version>
     <hikari.version>2.4.12</hikari.version>
