@@ -279,6 +279,10 @@ public final class FSImageFormatPBINode {
         INodeDirectory p = dir.getInode(e.getParent()).asDirectory();
         for (long id : e.getChildrenList()) {
           INode child = dir.getInode(id);
+          if (child == null) {
+            LOG.error("Child node id {} is missing from directory {}, {}", id,
+                p.getId(), p.getFullPathName());
+          }
           if (!addToParent(p, child)) {
             LOG.warn("Failed to add the inode {} to the directory {}",
                 child.getId(), p.getId());
